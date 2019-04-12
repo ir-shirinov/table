@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Avengers</title>
+	<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"> 
+	<style>
+
+		body {
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+
+			background-image: url(bg.jpg);
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+
+		.table {
+			width: 320px;
+
+			display: flex;
+			margin: 0 auto;
+			flex-wrap: wrap;
+		}
+
+		.number {
+			width: 32px;
+			height: 32px;
+			flex-shrink: 0;
+			margin-left: -1px;
+			margin-top: -1px;
+			
+			box-shadow: border-box;
+
+			font-family: 'Anton', sans-serif;
+			text-align: center;
+			font-size: 16px;
+			line-height: 30px;
+
+			border: 1px solid black;
+
+			transition: all 0.4s linear;
+
+			background-color: #FFF;
+		}
+
+		.table > .number:nth-child(-n+9),
+		.table > .number:nth-child(9n+1) {
+			color: red;
+		}
+
+		.logo {
+			display: block;
+			margin: 0 auto;
+			height: 170px;
+		}
+
+		.button {
+			position: relative;
+
+			display: block; 
+			width: 300px;
+			height: 150px;
+			margin: 0 auto;
+
+
+			background-image: url(im.png);
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: 0 0;
+
+			cursor: pointer;
+		}
+
+		@keyframes shadow {
+			0% {box-shadow: 0  0 10px 10px rgba(255,255,255,0.5);}
+			100% {box-shadow: 0  0 35px 35px rgba(255,255,255,0.5);}
+		}
+
+		.button::before {
+			content: '';
+
+			position: absolute;
+			top: 71%;
+			left: 16%;
+
+			width: 15px;
+			height: 15px;
+
+			background-color: #FFF;
+			border-radius: 50%;
+
+			box-shadow: 0  0 10px 10px rgba(255,255,255,0.5);
+			cursor: pointer;
+		}
+
+		.button::after {
+			content: '';
+
+			position: absolute;
+			top: 40%;
+			left: 69%;
+
+			width: 15px;
+			height: 15px;
+
+			background-color: #FFF;
+			border-radius: 50%;
+
+			box-shadow: 0  0 10px 10px rgba(255,255,255,0.5);
+		}
+
+
+		.button:hover::after,
+		.button:hover::before {
+			box-shadow: 0  0 25px 25px rgba(255,255,255,0.5);
+		}
+
+		.button-active::before,
+		.button-active::after {
+
+
+			animation: shadow .5s infinite alternate ease-in;
+		}
+
+		.final {
+			position: fixed;
+			top: 0;
+			left: 0;
+
+			display: none;
+			width: 100vw;
+			height: 100vh;
+			align-items: center;
+			justify-content: space-around;
+
+			background-color: rgb(136,140,120);
+		}
+
+		.final-show {
+			display: flex;
+		}
+
+		.final__gif {
+			width: 50%;
+		}
+
+		.final__container {
+			width: 50%;
+		}
+
+		.final__text {
+			margin: 0;
+			margin-bottom: 30px;
+			padding: 0;
+
+			font-family: 'Roboto', sans-serif;
+			text-align: left;
+			font-size: 24px;
+			line-height: 26px;
+			color: #FFF;
+		}
+
+		.final__code {
+			color: #FFF;
+			font-size: 16px;
+		}
+
+		@media screen and (max-width: 700px) {
+			.final__code {
+				color: #FFF;
+				font-size: 12px;
+			}
+		}
+	</style>
+</head>
+<body>
+
+	<audio src="avengers.mp3" autoplay id="main-music"></audio>
+	<audio src="talk.mp3" autoplay id="talk-music"></audio>
+	
+	<img class="logo" src="logo.png">
+	<div id="button" class="button"></div>
+	<div class="table" id="table"></div>
+
+	<div class="final">
+		<img src="final.gif" class="final__gif">
+		<div class="final__container">
+			<p class="final__text">Изначальный код таблицы (на страницe немного модифицирован из-за анимации)</p>
+			<pre class="final__code">
+(function(){
+  var fragment = document.createDocumentFragment();
+  for (var i = 10; i < 100; i++) {
+	if (i%10 !== 0) {
+	  var div = document.createElement('div');
+	  div.textContent = Math.floor(i/10) * (i%10);
+	  fragment.appendChild(div);
+	};
+  };
+  document.querySelector('#table').appendChild(fragment);
+})();
+			</pre>
+			<p class="final__text">Верстку и остальной код не рефракторил, так что за нее прошу сильно не пинать</p>
+		</div>
+	</div>
+
+
+	
+	<script>
+
+		function randNumSign(min, max) {
+		    var rand = min + Math.random() * (max + 1 - min);
+		    rand = Math.random() < 0.5 ? Math.floor(rand) * -1 : Math.floor(rand);
+		    return rand;
+		}
+
+		function randNum(min, max) {
+		    var rand = min + Math.random() * (max + 1 - min);
+		    rand = Math.random();
+		    return rand;
+		}
+
+		var fragment = document.createDocumentFragment();
+		for (var i = 10; i < 100; i++) {
+			if (i%10 !== 0) {
+				var div = document.createElement('div');
+				div.classList.add('number');
+				div.style.transform = `translate(${randNumSign(1000,1500)}px,${randNumSign(1000,1500)}px)`;
+				div.textContent = Math.floor(i/10) * (i%10);
+				fragment.appendChild(div);
+			};
+		};
+		document.querySelector('#table').appendChild(fragment);
+
+		var numbers = Array.prototype.slice.call(document.querySelectorAll('.number')) ;
+		var mainMusic = document.querySelector('#main-music');
+		mainMusic.volume = 0.07;
+		var talkMusic = document.querySelector('#talk-music');
+		talkMusic.volume = 0.3;
+
+		document.querySelector("#button").addEventListener("click", function(){
+			mainMusic.play();
+			document.querySelector("#button").classList.add('button-active');
+
+			var idTimer = setTimeout(function run() {
+
+				var numberDel = numbers.splice(randNum(0, numbers.length - 1),1);
+				numberDel[0].style.transform = `translate(0px,0px)`;
+			  	
+			  	if (numbers.length) {	
+			  		idTimer = setTimeout(run, 300);
+			  	} else {
+			  		document.querySelector("#button").classList.remove('button-active');
+			  		mainMusic.volume = 0.07;
+			  		talkMusic.play();
+			  		setTimeout( function () {
+			  			document.querySelector('.final').classList.add('final-show');
+			  		},1000);
+			  	};
+			}, 300);
+		});
+	</script>
+</body>
+</html>
