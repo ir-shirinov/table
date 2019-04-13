@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Avengers</title>
-	<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css?family=Play&amp;subset=cyrillic" rel="stylesheet">
 	<style>
 
 		body {
@@ -34,7 +34,7 @@
 			
 			box-shadow: border-box;
 
-			font-family: 'Anton', sans-serif;
+			font-family: 'Play', sans-serif;
 			text-align: center;
 			font-size: 16px;
 			line-height: 30px;
@@ -156,7 +156,7 @@
 			margin-bottom: 30px;
 			padding: 0;
 
-			font-family: 'Roboto', sans-serif;
+			font-family: 'Play', sans-serif;
 			text-align: left;
 			font-size: 24px;
 			line-height: 26px;
@@ -164,8 +164,21 @@
 		}
 
 		.final__code {
+			overflow: auto;
 			color: #FFF;
 			font-size: 16px;
+		}
+
+		.final-name {
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+	
+			font-family: 'Play', sans-serif;
+			text-align: right;
+			font-size: 24px;
+			line-height: 26px;
+			color: #000;
 		}
 
 		@media screen and (max-width: 700px) {
@@ -192,9 +205,10 @@
 			<pre class="final__code">
 (function(){
   var fragment = document.createDocumentFragment();
+  var div;
   for (var i = 10; i < 100; i++) {
 	if (i%10 !== 0) {
-	  var div = document.createElement('div');
+	  div = document.createElement('div');
 	  div.textContent = Math.floor(i/10) * (i%10);
 	  fragment.appendChild(div);
 	};
@@ -203,31 +217,44 @@
 })();
 			</pre>
 			<p class="final__text">Верстку и остальной код не рефракторил, так что за нее прошу сильно не пинать</p>
+			<span class="final-name">Ширинов Ильдар</span>
 		</div>
 	</div>
 
 
 	
 	<script>
-
-		function randNumSign(min, max) {
-		    var rand = min + Math.random() * (max + 1 - min);
-		    rand = Math.random() < 0.5 ? Math.floor(rand) * -1 : Math.floor(rand);
-		    return rand;
-		}
-
 		function randNum(min, max) {
 		    var rand = min + Math.random() * (max + 1 - min);
-		    rand = Math.random();
+		    rand = Math.floor(rand);
 		    return rand;
 		}
+		
+		var minPos = 1000;
+		var maxPos = 1500;
+
+		function randPosition() {
+			var number1 = randNum(-maxPos, maxPos);
+			if ((number1 > -minPos) && (number1 < minPos)) {
+				var number2 = minPos + Math.random() * (maxPos + 1 - minPos);
+				number2 = Math.random() < 0.5 ? Math.floor(number2) * -1 : Math.floor(number2);
+			} else {
+				var number2 = randNum(-maxPos, maxPos);
+			}
+		    return [number1, number2];
+		}
+
+		
 
 		var fragment = document.createDocumentFragment();
+		var div;
+		var positions;
 		for (var i = 10; i < 100; i++) {
 			if (i%10 !== 0) {
-				var div = document.createElement('div');
+				div = document.createElement('div');
 				div.classList.add('number');
-				div.style.transform = `translate(${randNumSign(1000,1500)}px,${randNumSign(1000,1500)}px)`;
+				positions = randPosition();
+				div.style.transform = `translate(${positions[0]}px,${positions[1]}px)`;
 				div.textContent = Math.floor(i/10) * (i%10);
 				fragment.appendChild(div);
 			};
@@ -236,13 +263,14 @@
 
 		var numbers = Array.prototype.slice.call(document.querySelectorAll('.number')) ;
 		var mainMusic = document.querySelector('#main-music');
-		mainMusic.volume = 0.07;
 		var talkMusic = document.querySelector('#talk-music');
+		var buttonStart = document.querySelector("#button");
+		mainMusic.volume = 0.07;	
 		talkMusic.volume = 0.3;
 
-		document.querySelector("#button").addEventListener("click", function(){
+		buttonStart.addEventListener("click", function(){
 			mainMusic.play();
-			document.querySelector("#button").classList.add('button-active');
+			buttonStart.classList.add('button-active');
 
 			var idTimer = setTimeout(function run() {
 
@@ -252,15 +280,17 @@
 			  	if (numbers.length) {	
 			  		idTimer = setTimeout(run, 300);
 			  	} else {
-			  		document.querySelector("#button").classList.remove('button-active');
+			  		buttonStart.classList.remove('button-active');
 			  		mainMusic.volume = 0.07;
 			  		talkMusic.play();
-			  		setTimeout( function () {
+			  		setTimeout(function () {
 			  			document.querySelector('.final').classList.add('final-show');
 			  		},1000);
 			  	};
 			}, 300);
 		});
+
+		
 	</script>
 </body>
 </html>
